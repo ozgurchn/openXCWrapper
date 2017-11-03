@@ -4,13 +4,27 @@ import {
   Text,
   View
 } from 'react-native';
+import io from 'socket.io-client/dist/socket.io'
 
 export default class App extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      name: 'Test',
+    };
+    this.socket = io('http://192.168.127.185:5858/', {transports: ['websocket'], jsonp: false});
+    this.socket.on('add_data', (data) => {
+      const value = data.value;
+      this.setState({name: value});
+    } );
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
+          {this.state.name}
         </Text>
         <Text style={styles.instructions}>
           To get started, edit index.android.js
