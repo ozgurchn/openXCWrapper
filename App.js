@@ -5,6 +5,7 @@ import {
   View
 } from 'react-native';
 import io from 'socket.io-client/dist/socket.io'
+import { NativeModules } from 'react-native';
 
 export default class App extends Component {
 
@@ -13,18 +14,35 @@ export default class App extends Component {
     this.state = {
       name: 'Test',
     };
-    this.socket = io('http://192.168.127.185:5858/', {transports: ['websocket'], jsonp: false});
+    this.socket = io('http://207.154.196.158:5858/', {transports: ['websocket'], jsonp: false});
     this.socket.on('add_data', (data) => {
       const value = data.value;
       this.setState({name: value});
     } );
   }
 
+  componentDidMount() {
+    console.log('hadi oglum');
+  }
+
+  test() {
+    NativeModules.openXCWrapper.getActivityName((name) => {
+      alert(name);
+    });
+  }
+
+  test2() {
+    NativeModules.openXCWrapper.alert();
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
+        <Text style={styles.welcome} onPress={() => this.test()}>
           {this.state.name}
+        </Text>
+        <Text style={styles.welcome} onPress={() => this.test2()}>
+          DENEME
         </Text>
         <Text style={styles.instructions}>
           To get started, edit index.android.js
